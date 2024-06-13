@@ -12,14 +12,15 @@ require('includes/header.php');
       <div class="row">
         <div class="col-md-2">
           <label for="method" class="form-label text-white">Forma de Busca</label>
-          <select id="method" class="form-control dropdown-toggle btn btn-success" title="SELECIONE" data-toggle="dropdown" onchange="searchModules()">
+          <select id="method" class="form-control dropdown-toggle btn btn-success" data-toggle="dropdown" onchange="searchModules()">
             <option value="writed">Campo de Busca</option>
             <option value="alpha">Alfabética</option>
           </select>
         </div>
         <div class="col-md-2 filter">
           <label for="aplphabet" class="form-label text-white">Filtro Alfabético</label>
-          <select id="aplphabet" class="form-control dropdown-toggle btn btn-success" title="SELECIONE" data-toggle="dropdown">
+          <select id="aplphabet" class="form-control dropdown-toggle btn btn-success" data-toggle="dropdown">
+          <option value="">SELECIONE</option>
             <?php
               foreach (range('A', 'Z') as $letter) {
                 echo '<option value="' . $letter . '">' . $letter . '</option>';
@@ -30,11 +31,11 @@ require('includes/header.php');
         </div>
         <div class="col-md-3 writed">
           <label for="libreSearch" class="form-label text-white">Busque pelo prato</label>
-          <input type="email" class="form-control" id="libreSearch">
+          <input type="text" class="form-control" id="libreSearch">
         </div>
         <div class="col-md-1">
           <label class="form-label pt-3"> </label>
-          <button type="button" class="form-control btn btn-success">Buscar</button>
+          <button type="button" class="form-control btn btn-success" onclick="getSearch()">Buscar</button>
         </div>
       </div>
     </div>
@@ -60,7 +61,7 @@ require('includes/header.php');
 <script>
   $(document).ready(function(){
     searchModules();
-    initialSearch();
+    search({route: 'categories.php'});
   });
 
   const searchModules = () => {
@@ -73,10 +74,29 @@ require('includes/header.php');
     }
   }
 
-  const initialSearch = () => {
-    $.post("php/requisitions.php", {route: 'categories.php'})
+  const getSearch = () => {
+    let arg = $("#libreSearch").val()  ? 'search.php?s' + $("#libreSearch").val() : 'search.php?f=' + $("#aplphabet").val();
+    console.log(arg);
+    search({route: arg});
+    $("#aplphabet").val('');
+    $("#libreSearch").val('');
+  }
+
+  const search = (arg) => {
+    $.post("php/requisitions.php", arg)
     .done(function (response) {
       $(".list").html(response);
     });
+  }
+
+  const showMore = () => {
+    let cardText = $('#card-text');
+    if (cardText.hasClass('collapsed')) {
+      cardText.removeClass('collapsed');
+      $(this).text('Show More');
+    } else {
+      cardText.addClass('collapsed');
+      $(this).text('Show Less');
+    }
   }
 </script>
