@@ -91,6 +91,11 @@ button:focus-visible {
   -webkit-line-clamp: 3; /* Number of lines to show */
   -webkit-box-orient: vertical;
 }
+
+.collapsed{
+  -webkit-line-clamp: 30;
+}
+
 .show-more {
   cursor: pointer;
   color: #646cff;

@@ -48,7 +48,7 @@ require('includes/header.php');
       <strong>Pratos encontrados</strong>
     </div>
     <div class="card-body" style="background-color: #8bc34a;">
-      <div class="row list">
+      <div class="row list text-center">
 
       </div>
     </div>
@@ -61,7 +61,7 @@ require('includes/header.php');
 <script>
   $(document).ready(function(){
     searchModules();
-    search({route: 'categories.php'});
+    search({ archive: 'php/categoryRequisition.php',route: 'categories.php'});
   });
 
   const searchModules = () => {
@@ -75,22 +75,26 @@ require('includes/header.php');
   }
 
   const getSearch = () => {
-    let arg = $("#libreSearch").val()  ? 'search.php?s' + $("#libreSearch").val() : 'search.php?f=' + $("#aplphabet").val();
-    console.log(arg);
-    search({route: arg});
+    let arg = $("#libreSearch").val()  ? 'search.php?s=' + $("#libreSearch").val() : 'search.php?f=' + $("#aplphabet").val();
+    search({route: arg, archive: 'php/searchRequisition.php'});
     $("#aplphabet").val('');
     $("#libreSearch").val('');
   }
 
-  const search = (arg) => {
-    $.post("php/requisitions.php", arg)
+  const getRecipie = (arg) => {
+    arg = 'lookup.php?i='+arg;
+    search({route: arg, archive: 'php/recipeRequisition.php'});
+  }
+
+  const search = (args) => {
+    $.post(args.archive, args)
     .done(function (response) {
       $(".list").html(response);
     });
   }
 
-  const showMore = () => {
-    let cardText = $('#card-text');
+  const showMore = (args) => {
+    let cardText = $('#card-text-'+args);
     if (cardText.hasClass('collapsed')) {
       cardText.removeClass('collapsed');
       $(this).text('Show More');

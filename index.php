@@ -14,6 +14,7 @@ $route = $_GET['route'] ?? 'home';
 if (!in_array($route, $routes)) {
   $route = '404';
 }
+
 // https://www.themealdb.com/api.php
 // Fluxo de rotas
 switch ($route) {
